@@ -56,6 +56,21 @@ int Determinant2x2(Matrix* matrix) {
   return determinant;
 }*/
 
+Matrix* TransposedMatrix(Matrix* matrix) {
+  int m = std::get<0>(matrix->getOrder());
+  int n = std::get<1>(matrix->getOrder());
+
+  Matrix* result = new Matrix{n, m};
+
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      result->setElement(i, j, matrix->getElement(j, i));
+    }
+  }
+
+  return result;
+}
+
 int Determinant(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == std::get<1>(matrix->getOrder()));
   

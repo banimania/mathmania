@@ -17,10 +17,13 @@ int main() {
 
   Matrix matrix3adj = *MatrixAdjugate(&matrix3);
 
-  test(Determinant(&matrix2), -200, "Determinant 2x2");
-  test(Determinant(&matrix3), 0, "Determinant 3x3");
-  test<float>(ElementAdjugate(&matrix3, 1, 1), -12, "Adjugate Element 3x3");
-  test(Determinant(MatrixAdjugate(&matrix3)), 0, "Determinant Adjugate Matrix 3x3");
+  Matrix transposed = *TransposedMatrix(&matrix3);
   
+  test<float>(Determinant(&matrix2), -200, "Determinant 2x2");
+  test<float>(Determinant(&matrix3), 0, "Determinant 3x3");
+  test<float>(ElementAdjugate(&matrix3, 1, 1), -12, "Adjugate Element 3x3");
+  test<float>(Determinant(MatrixAdjugate(&matrix3)), 0, "Determinant Adjugate Matrix 3x3");
+  test<float>(Determinant(&transposed), 0, "Determinant Transposed Matrix");
+
   return 0;
 }

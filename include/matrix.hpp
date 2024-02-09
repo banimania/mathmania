@@ -41,10 +41,13 @@ public:
     }
   }
 
+  void setElements(float* newElements) {
+    setElements(newElements, m * n);
+  }
+
   float getElement(int i, int j) {
     return *(elements + i * n + j);
   }
-
 
   bool isSquare() {
     return n == m;
@@ -57,6 +60,56 @@ public:
   Matrix(int m, int n) : m(m), n(n) {
     elements = (float*) malloc(m * n * sizeof(float));
     setZero();
+  }
+
+  Matrix& operator+(Matrix& matrix) {
+    assert(matrix.n == n && matrix.m == m);
+    
+    Matrix* newMatrix = new Matrix(n, m);
+    
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        newMatrix->setElement(i, j, matrix.getElement(i, j) + getElement(i, j));
+      }
+    }
+
+    return *newMatrix;
+  }
+  
+  Matrix& operator-(Matrix& matrix) {
+    assert(matrix.n == n && matrix.m == m);
+    
+    Matrix* newMatrix = new Matrix(n, m);
+    
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        newMatrix->setElement(i, j, matrix.getElement(i, j) - getElement(i, j));
+      }
+    }
+
+    return *newMatrix;
+  }
+
+  Matrix& operator*(Matrix& matrix) {
+    assert(matrix.m == n);
+
+    int newM = m;
+    int newN = matrix.n;
+
+    Matrix* newMatrix = new Matrix(newM, newN);
+    
+    for (int i = 0; i < newM; i++) {
+      for (int j = 0; j < newN; j++) {
+        float sum = 0;
+        for (int k = 0; k < n; k++) {
+          sum += matrix.getElement(i, k) * matrix.getElement(k, j);
+        }
+
+        newMatrix->setElement(i, j, sum);
+      }
+    }
+
+    return *newMatrix;
   }
 
   void print() {

@@ -27,13 +27,13 @@ Matrix* MatrixDeleteRowAndColumn(Matrix* matrix, int i, int j) {
   return auxMatrix;
 }
 
-int Determinant1x1(Matrix* matrix) {
+float Determinant1x1(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == 1 && std::get<1>(matrix->getOrder()) == 1);
   
   return matrix->getElement(0, 0);
 }
 
-int Determinant2x2(Matrix* matrix) {
+float Determinant2x2(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == 2 && std::get<1>(matrix->getOrder()) == 2);
   
   return matrix->getElement(0, 0) * matrix->getElement(1, 1) - matrix->getElement(0, 1) * matrix->getElement(1, 0);
@@ -56,7 +56,7 @@ int Determinant2x2(Matrix* matrix) {
   return determinant;
 }*/
 
-Matrix* TransposedMatrix(Matrix* matrix) {
+Matrix* MatrixTranspose(Matrix* matrix) {
   int m = std::get<0>(matrix->getOrder());
   int n = std::get<1>(matrix->getOrder());
 
@@ -71,7 +71,7 @@ Matrix* TransposedMatrix(Matrix* matrix) {
   return result;
 }
 
-int Determinant(Matrix* matrix) {
+float Determinant(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == std::get<1>(matrix->getOrder()));
   
   int order = std::get<0>(matrix->getOrder());
@@ -124,4 +124,21 @@ Matrix* MatrixAdjugate(Matrix* matrix) {
   return adjugate;
 }
 
+Matrix* MatrixInverse(Matrix* matrix) {
+  assert(matrix->isSquare() && Determinant(matrix) != 0);
+
+  int order = std::get<0>(matrix->getOrder());
+  float multiplier = 1.0f / Determinant(matrix);
+
+  Matrix* transposeAdjugateMatrix = MatrixTranspose(MatrixAdjugate(matrix));
+  Matrix* inverseMatrix = new Matrix{order, order};
+  
+  for (int i = 0; i < order; i++) {
+    for (int j = 0; j < order; j++) {
+      inverseMatrix->setElement(i, j, multiplier * transposeAdjugateMatrix->getElement(i, j));
+    }
+  }
+
+  return inverseMatrix;
+}
 #endif

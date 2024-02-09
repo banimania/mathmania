@@ -3,6 +3,29 @@
 
 #include "matrix.hpp"
 #include <cassert>
+#include <cstdlib>
+
+Matrix* MatrixDeleteRowAndColumn(Matrix* matrix, int i, int j) {
+  assert(matrix->isSquare());
+
+  int newOrder = std::get<0>(matrix->getOrder()) - 1;
+  Matrix* auxMatrix = new Matrix{newOrder, newOrder};
+
+  float* newElements = (float*) malloc(newOrder * newOrder * sizeof(float));
+
+  int count = 0;
+  for (int k = 0; k < newOrder + 1; k++) {
+    for (int l = 0; l < newOrder + 1; l++) {
+      if (i == k || j == l) continue;
+      *(newElements + count) = matrix->getElement(k, l);
+      count++;
+    }
+  }
+
+  auxMatrix->setElements(newElements, newOrder * newOrder);
+
+  return auxMatrix;
+}
 
 int Determinant1x1(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == 1 && std::get<1>(matrix->getOrder()) == 1);
@@ -16,14 +39,22 @@ int Determinant2x2(Matrix* matrix) {
   return matrix->getElement(0, 0) * matrix->getElement(1, 1) - matrix->getElement(0, 1) * matrix->getElement(1, 0);
 }
 
-//TODO
-int DeterminantLarger(Matrix* matrix, int order) {
+/*float DeterminantLarger(Matrix* matrix, int order) {
   assert(matrix->isSquare());
   
+  float determinant = 0.0f;
   
+  int sign = 1;
+  for (int i = 0; i < order; i++) {
+    float element = matrix->getElement(i, 0);
 
-  return 5;
-}
+    determinant += element * sign * Determinant(MatrixDeleteRowAndColumn(matrix, i, 0));
+
+    sign = sign == 1 ? -1 : 1;
+  }
+
+  return determinant;
+}*/
 
 int Determinant(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == std::get<1>(matrix->getOrder()));
@@ -37,59 +68,30 @@ int Determinant(Matrix* matrix) {
       return Determinant2x2(matrix);
       break;
     default:
-      return DeterminantLarger(matrix, order);
+      float determinant = 0.0f;
+
+      int sign = 1;
+      for (int i = 0; i < order; i++) {
+        float element = matrix->getElement(i, 0);
+
+        determinant += element * sign * Determinant(MatrixDeleteRowAndColumn(matrix, i, 0));
+
+        sign = sign == 1 ? -1 : 1;
+      }
+
+      return determinant;
       break;
   }
 }
 
-//TODO: fix this
 float ElementAdjugate(Matrix* matrix, int i, int j) {
   assert(matrix->isSquare());
 
-  int sign = i + j % 2 == 0 ? 1 : -1;
+  int sign = (i + j) % 2 == 0 ? 1 : -1;
 
-  int newOrder = std::get<0>(matrix->getOrder()) - 1;
-  Matrix auxMatrix = {newOrder, newOrder};
+  Matrix* auxMatrix = MatrixDeleteRowAndColumn(matrix, i, j);
 
-  int carry = 0;
-  for (int k = 0; k < newOrder + 1; k++) {
-    for (int l = 0; l < newOrder + 1; l++) {
-      if (k == i || l == j) {
-        if (!carry) carry++;
-        continue;
-      }
-      auxMatrix.setElement(k - carry, l - carry, matrix->getElement(k, l));
-    }
-  }
-
-  return sign * Determinant(&auxMatrix);
-}
-
-//TODO: fix this
-Matrix* MatrixTest(Matrix* matrix, int i, int j) {
-  assert(matrix->isSquare());
-
-  int newOrder = std::get<0>(matrix->getOrder()) - 1;
-  Matrix* auxMatrix = new Matrix{newOrder, newOrder};
-
-  int carryRow = 0;
-  int carryCol = 0;
-  for (int k = 0; k < newOrder; k++) {
-    carryCol = 0;
-    if (k == i) {
-      carryRow = 1;
-      continue;
-    }
-    for (int l = 0; l < newOrder; l++) {
-      if (l == j) {
-        carryCol = 1;
-        continue;
-      }
-      auxMatrix->setElement(k - carryRow, l - carryCol, matrix->getElement(k, l));
-    }
-  }
-
-  return auxMatrix;
+  return sign * Determinant(auxMatrix);
 }
 
 Matrix* MatrixAdjugate(Matrix* matrix) {

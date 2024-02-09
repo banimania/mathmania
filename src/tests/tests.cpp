@@ -16,13 +16,11 @@ int main() {
   matrix3.setElements(new float[]{1, 2, 3, 4, 5, 6, 7, 8, 9}, 9);
 
   Matrix matrix3adj = *MatrixAdjugate(&matrix3);
-  Matrix matrixTest = *MatrixTest(&matrix3, 0, 0);
 
   test(Determinant(&matrix2), -200, "Determinant 2x2");
-  test(Determinant(&matrix3), 5, "Determinant 3x3");
+  test(Determinant(&matrix3), 0, "Determinant 3x3");
   test<float>(ElementAdjugate(&matrix3, 1, 1), -12, "Adjugate Element 3x3");
-  test(Determinant(MatrixAdjugate(&matrix3)), 27, "Adjugate Matrix 3x3");
+  test(Determinant(MatrixAdjugate(&matrix3)), 0, "Determinant Adjugate Matrix 3x3");
   
-  matrixTest.print();
   return 0;
 }

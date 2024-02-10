@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <tuple>
 #include "../../include/mathmania.hpp"
 
 template <typename T>
@@ -40,7 +41,18 @@ int main() {
   vector v = {4, 4, 4};
   vector v_2 = {4, 4, 4};
   vector u = {2, 1, 3};
+  
 
+  vector p_p = {4, 0, 0};
+  vector p_u = {-2, 1, 0};
+  vector p_v = {3, 0, 1};
+
+  plane p = {&p_p, &p_u, &p_v};
+  float a = std::get<0>(p.getCoefficients());
+  float b = std::get<1>(p.getCoefficients());
+  float c = std::get<2>(p.getCoefficients());
+  float d = std::get<3>(p.getCoefficients());
+  
   test<float>(Determinant(&matrix2), -200, "Determinant 2x2");
   test<float>(Determinant(&matrix3), 0, "Determinant 3x3");
   test<float>(Determinant(&matrix4), -850758, "Determinant 4x4");
@@ -55,6 +67,7 @@ int main() {
   test<float>(NormalizeVector(&v)->x, 0.57735, "Normalize Vector");
   test<float>(v * u, 24, "Vector Dot Product");
   test<float>(v == v_2, true, "Vector Comparison");
+  test<float>(a + b + c + d, - 4, "Plane Coefficients");
 
   return 0;
 }

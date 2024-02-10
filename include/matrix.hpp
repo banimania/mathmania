@@ -83,7 +83,7 @@ public:
     
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
-        newMatrix->setElement(i, j, matrix.getElement(i, j) - getElement(i, j));
+        newMatrix->setElement(i, j, getElement(i, j) - matrix.getElement(i, j));
       }
     }
 
@@ -110,6 +110,18 @@ public:
     }
 
     return *newMatrix;
+  }
+
+  bool& operator==(Matrix& matrix) {
+    if (matrix.m != m || matrix.n != n) return *(new bool(false));
+
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        if (matrix.getElement(i, j) != getElement(i, j)) return *(new bool(false));
+      }
+    }
+
+    return *(new bool(true));
   }
 
   void print() {

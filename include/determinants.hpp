@@ -5,7 +5,7 @@
 #include <cassert>
 #include <cstdlib>
 
-Matrix* MatrixDeleteRowAndColumn(Matrix* matrix, int i, int j) {
+inline Matrix* MatrixDeleteRowAndColumn(Matrix* matrix, int i, int j) {
   assert(matrix->isSquare());
 
   int newOrder = std::get<0>(matrix->getOrder()) - 1;
@@ -27,13 +27,13 @@ Matrix* MatrixDeleteRowAndColumn(Matrix* matrix, int i, int j) {
   return auxMatrix;
 }
 
-float Determinant1x1(Matrix* matrix) {
+inline float Determinant1x1(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == 1 && std::get<1>(matrix->getOrder()) == 1);
   
   return matrix->getElement(0, 0);
 }
 
-float Determinant2x2(Matrix* matrix) {
+inline float Determinant2x2(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == 2 && std::get<1>(matrix->getOrder()) == 2);
   
   return matrix->getElement(0, 0) * matrix->getElement(1, 1) - matrix->getElement(0, 1) * matrix->getElement(1, 0);
@@ -56,7 +56,7 @@ float Determinant2x2(Matrix* matrix) {
   return determinant;
 }*/
 
-Matrix* MatrixTranspose(Matrix* matrix) {
+inline Matrix* MatrixTranspose(Matrix* matrix) {
   int m = std::get<0>(matrix->getOrder());
   int n = std::get<1>(matrix->getOrder());
 
@@ -71,7 +71,7 @@ Matrix* MatrixTranspose(Matrix* matrix) {
   return result;
 }
 
-float Determinant(Matrix* matrix) {
+inline float Determinant(Matrix* matrix) {
   assert(std::get<0>(matrix->getOrder()) == std::get<1>(matrix->getOrder()));
   
   int order = std::get<0>(matrix->getOrder());
@@ -99,7 +99,7 @@ float Determinant(Matrix* matrix) {
   }
 }
 
-float ElementAdjugate(Matrix* matrix, int i, int j) {
+inline float ElementAdjugate(Matrix* matrix, int i, int j) {
   assert(matrix->isSquare());
 
   int sign = (i + j) % 2 == 0 ? 1 : -1;
@@ -109,7 +109,7 @@ float ElementAdjugate(Matrix* matrix, int i, int j) {
   return sign * Determinant(auxMatrix);
 }
 
-Matrix* MatrixAdjugate(Matrix* matrix) {
+inline Matrix* MatrixAdjugate(Matrix* matrix) {
   assert(matrix->isSquare());
 
   int order = std::get<0>(matrix->getOrder());
@@ -124,7 +124,7 @@ Matrix* MatrixAdjugate(Matrix* matrix) {
   return adjugate;
 }
 
-Matrix* MatrixInverse(Matrix* matrix) {
+inline Matrix* MatrixInverse(Matrix* matrix) {
   assert(matrix->isSquare() && Determinant(matrix) != 0);
 
   int order = std::get<0>(matrix->getOrder());

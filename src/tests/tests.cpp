@@ -42,6 +42,6 @@ int main() {
   test<float>(Determinant(&matrix3_transpose), 0, "Determinant Transposed Matrix");
   test<float>(Determinant(&matrix3_2_inverse), -1.0f / 6.0f, "Determinant Transposed Matrix");
   test<float>(Determinant(&matrix2_multiplication), 40000, "Determinant Matrix Product");
-
+  test<float>(Determinant(MatrixInverse(&matrix3_2)), 1.0f / Determinant(&matrix3_2), "Determinant Inverse Matrix");
   return 0;
 }

@@ -2,6 +2,7 @@
 #define PLANE_HPP
 
 #include "vector.hpp"
+#include "line.hpp"
 #include <tuple>
 
 struct Plane {
@@ -46,5 +47,14 @@ public:
 };
 
 typedef Plane plane;
+
+inline Vector* IntersectionPlaneLine(Plane* p, Line* l) {
+  float A = std::get<0>(p->getCoefficients());
+  float B = std::get<1>(p->getCoefficients());
+  float C = std::get<2>(p->getCoefficients());
+  float D = std::get<3>(p->getCoefficients());
+  float lambda = - (A * l->getPoint()->x + B * l->getPoint()->y + C * l->getPoint()->z + D) / (A * l->getVector()->x + B * l->getVector()->y + C * l->getVector()->z);
+  return l->getPointWithParameter(lambda); 
+}
 
 #endif

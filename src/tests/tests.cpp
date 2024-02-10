@@ -52,7 +52,14 @@ int main() {
   float b = std::get<1>(p.getCoefficients());
   float c = std::get<2>(p.getCoefficients());
   float d = std::get<3>(p.getCoefficients());
-  
+ 
+  vector l_p = {1, 1, 1};
+  vector l_v = {2, 3, 4};
+  line l = {&l_p, &l_v};
+
+  line l2 = {new vector{1, 5, -2}, new vector{2, -1, 3}};
+  line l3 = {new vector{-7, 4, 1}, new vector{1, 2, -6}};
+
   test<float>(Determinant(&matrix2), -200, "Determinant 2x2");
   test<float>(Determinant(&matrix3), 0, "Determinant 3x3");
   test<float>(Determinant(&matrix4), -850758, "Determinant 4x4");
@@ -68,6 +75,8 @@ int main() {
   test<float>(v * u, 24, "Vector Dot Product");
   test<float>(v == v_2, true, "Vector Comparison");
   test<float>(a + b + c + d, - 4, "Plane Coefficients");
+  test<float>(*IntersectionPlaneLine(&p, &l) == *(new vector{-1, -2, -3}), true, "Plane Line Intersection");
+  test<float>(*IntersectionLineLine(&l2, &l3) == *(new vector{-5, 8, -11}), true, "Line Line Intersection");
 
   return 0;
 }
